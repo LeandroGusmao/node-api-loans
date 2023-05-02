@@ -2,9 +2,10 @@ const Joi = require('joi');
 
 const endpoint = async (req, res, mod) => {
     try {
-        const {name, author_id, year, units} = req.params
+        const {id, name, author_id, year, units} = req.params
 
         const bookValidate = Joi.object({
+            id: Joi.string().uuid({version: 'uuidv4'}).required(),
             name: Joi.string().required(),
             author_id: Joi.string().uuid({version: 'uuidv4'}).required(),
             year: Joi.number().integer().positive().required(),
@@ -17,11 +18,12 @@ const endpoint = async (req, res, mod) => {
         }
 
         const author = await mod.author.read(author_id)
+  
         if(!author) {
             return res.send(404, {message: "Author not found."})
         }
 
-        const book = await mod.book.create({
+        const book = await mod.book.update(id, {
             name, 
             author_id,
             year,

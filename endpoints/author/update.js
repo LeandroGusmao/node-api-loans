@@ -2,9 +2,10 @@ const Joi = require("joi")
 
 const endpoint = async (req, res, mod) => {
     try {
-        const {name} = req.params
+        const {id, name} = req.params
 
         const authorValidate = Joi.object({
+            id: Joi.string().uuid({version: 'uuidv4'}).required(),
             name: Joi.string().required(),
         })
 
@@ -13,17 +14,16 @@ const endpoint = async (req, res, mod) => {
             throw error.details[0].message
         }
 
-        const authorName = await mod.author.findAuthorByName(name);
-        if(authorName) {
-            return res.send(409, {error: "An author with that name already exists."});
-        }
-
-        const author = await mod.author.create({
-            name, 
+        const author = await mod.author.update(id, { 
+            name: name
         })
 
         res.success(author)
     } catch(error) {
+        if(error.name === "SequelizeUniqueConstraintError" && error.original.constraint === "author_name_key") {
+            return res.send(409, {error: "An author with that name already exists."});
+        }
+
         console.log(error)
         res.error(error)
     }

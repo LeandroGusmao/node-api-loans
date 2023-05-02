@@ -50,6 +50,13 @@ db.book.belongsTo(db.author, {
   foreingKey: "author_id",
 })
 
+/*
+  Loan
+*/
+db.loan.belongsTo(db.book, {
+  foreingKey: "book_id",
+})
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

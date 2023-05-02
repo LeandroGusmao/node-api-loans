@@ -25,4 +25,10 @@ module.exports = async(rep, should) => {
         const authors = await rep.author.list()
         should(authors.length).equal(1)
     })
+
+    it("Find by author name", async () => {
+        const authorName = "J.R.R Tokien"
+        const author = await rep.author.findAuthorByName(authorName)
+        should(author.name).equal(authorName)
+    })
 }

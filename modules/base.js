@@ -21,6 +21,10 @@ class BaseModule {
     async update(id, values) {
         return this.rep[this.model].update(id, values)
     }
+
+    async delete(id) {
+        return this.rep[this.model].delete(id)
+    }
     
 }
 

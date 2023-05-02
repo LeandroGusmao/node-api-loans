@@ -1,7 +1,7 @@
 module.exports = async (request, should, host) => {
     it("It successfully executes /GET ", async () => {
         const res = await request(host).get("/book")
-        
-        should(res.body.result.length).equal(1)  
+   
+        should(res.body.result.length).equal(2)
     })
 }

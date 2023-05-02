@@ -2,10 +2,10 @@ const Joi = require("joi")
 
 const endpoint = async (req, res, mod) => {
     try {
-        const {name} = req.params
+        const {id} = req.params
 
         const authorValidate = Joi.object({
-            name: Joi.string().required(),
+            id: Joi.string().uuid({version: 'uuidv4'}).required(),
         })
 
         const {error} = authorValidate.validate(req.params)
@@ -13,14 +13,11 @@ const endpoint = async (req, res, mod) => {
             throw error.details[0].message
         }
 
-        const authorName = await mod.author.findAuthorByName(name);
-        if(authorName) {
-            return res.send(409, {error: "An author with that name already exists."});
-        }
+        const author = await mod.author.read(id)
 
-        const author = await mod.author.create({
-            name, 
-        })
+        if(!author) {
+            return res.send(404, {message: "Author not found."})
+        } 
 
         res.success(author)
     } catch(error) {
