@@ -15,14 +15,10 @@ const endpoint = async (req, res, mod) => {
             throw error.details[0].message
         }
 
-        const loanActive = await mod.loan.read(id)
-        if(!loanActive) {
-            return res.send(404, {message: "Loan not found."})
+        const loan = await mod.loan.loanUpdate({id, start_date, end_date})
+        if(loan.error) {
+            return res.send(409, loan)
         }
-
-        const loan = await mod.loan.update(id, {
-            start_date, end_date
-        })
 
         res.success(loan)
     } catch(error) {
