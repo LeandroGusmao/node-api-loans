@@ -13,7 +13,7 @@ module.exports = async(mod, should) => {
     })
 
     it("It successfully executes create", async () => {
-        const resp = await mod.loan.create(loanMock)
+        const resp = await mod.loan.loanCreate(loanMock)
         loan_id = resp.id
         should(resp.book_id).equal(loanMock.book_id)
     })
@@ -31,12 +31,13 @@ module.exports = async(mod, should) => {
 
     it("It successfully executes update", async () => {
         const loanUpdate = {
+            id: loan_id,
             book_id: loanMock.book_id,
             start_date: new Date("2023-09-01T00:00:00.000Z"),
             end_date: new Date("2023-09-30T00:00:00.000Z"),
         }
 
-        const resp = await mod.loan.update(loan_id, loanUpdate)
+        const resp = await mod.loan.loanUpdate(loanUpdate)
 
         should(resp.start_date).equal(loanUpdate.start_date)
         should(resp.end_date).equal(loanUpdate.end_date)

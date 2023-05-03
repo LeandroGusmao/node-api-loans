@@ -20,7 +20,7 @@ class LoanModule extends BaseModule {
             return {error: true, message: "Book not found."}
         }
 
-        const loanActive = await listLoanByBookId(book_id)
+        const loanActive = await this.listLoanByBookId(book_id)
         if(loanActive.length === book.units) {
             return {error: true, message: "There are no units available for loan at this time."}
         }
